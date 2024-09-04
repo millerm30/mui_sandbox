@@ -12,18 +12,18 @@ interface NotificationData {
 const NotificationsData: NotificationData[] = [
   {
     id: 1,
-    title: 'Title One',
+    title: 'Title One Notification Card',
     description:
       'This is the content of the notification, it can be long or short, depending on the content.',
   },
   {
     id: 2,
-    title: 'Title Two',
+    title: 'Title Two This Is A Notification Card',
     description: 'Notification Description Two, this is a short one.',
   },
   {
     id: 3,
-    title: 'Title Three',
+    title: 'Title Three Notification Card Test',
     description:
       'Notification Description Three, this is a long one. It can be long or short. It depends on the content. This is a long one. It can be long or short. It depends on the content.',
   },

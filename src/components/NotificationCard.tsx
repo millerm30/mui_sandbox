@@ -119,7 +119,7 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
         </Dropdown.Button>
       }
     >
-      <Paragraph>{props.description}</Paragraph>
+      <Paragraph style={{ marginBottom: 0 }}>{props.description}</Paragraph>
     </Card>
   );
 };
