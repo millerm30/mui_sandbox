@@ -54,7 +54,7 @@ const AppleFormContainer = ({
               <TextArea
                 allowClear
                 rows={5}
-                style={{ resize: ' none' }}
+                style={{ resize: 'none' }}
                 placeholder="---Enter Your Key---"
               />
             </Form.Item>
@@ -87,7 +87,7 @@ const AppleFormContainer = ({
             htmlType="submit"
             loading={isSubmitting}
             iconPosition="end"
-            size="large"
+            size="middle"
             type="primary"
             style={{ width: 130 }}
           >

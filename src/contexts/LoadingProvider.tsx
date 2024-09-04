@@ -1,4 +1,3 @@
-// LoadingProvider.tsx
 import { useState, ReactNode } from 'react';
 import LoadingContext from './LoadingContext';
 

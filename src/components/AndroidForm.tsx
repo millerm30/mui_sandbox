@@ -39,7 +39,7 @@ const AndroidFormContainer = ({
                 name="serviceAccountJson"
                 allowClear
                 rows={12}
-                style={{ resize: ' none' }}
+                style={{ resize: 'none' }}
                 placeholder="{}"
               />
             </Form.Item>
@@ -51,7 +51,7 @@ const AndroidFormContainer = ({
               <Button
                 htmlType="submit"
                 loading={isSubmitting}
-                size="large"
+                size="middle"
                 type="primary"
                 style={{ width: 130 }}
                 iconPosition="end"

@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
-import { HomeOutlined, PushpinOutlined } from '@ant-design/icons';
-import { Layout, Menu, Switch, MenuProps } from 'antd';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import {
+  HomeOutlined,
+  PushpinOutlined,
+  IdcardOutlined,
+} from '@ant-design/icons';
+import {
+  Layout,
+  Menu,
+  Switch,
+  MenuProps,
+  Space,
+  Typography,
+  Row,
+  Col,
+} from 'antd';
+import { Link, useLocation } from 'react-router-dom';
 import { useLoadingContext } from '../hooks/useLoadingContext';
 
 const { Header, Content, Sider } = Layout;
+const { Title } = Typography;
 
 interface Props {
   children?: React.ReactNode;
@@ -33,15 +47,34 @@ const items: MenuItem[] = [
     '2',
     <PushpinOutlined />,
   ),
+  getItem(
+    <Link to="/notification-card">Notification Card</Link>,
+    '3',
+    <IdcardOutlined />,
+  ),
 ];
+
+const locationsToShowSwitches = ['/push-notifications'];
+
+const pageTitles: { [key: string]: string } = {
+  '/': 'Home',
+  '/push-notifications': 'Push Notifications',
+  '/notification-card': 'Notification Card',
+};
 
 const PageLayout = ({ children }: Props): JSX.Element => {
   const { handleLoadingChange, handleSubmit } = useLoadingContext();
+  const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    document.title = pageTitles[location.pathname];
+  }, [location.pathname]);
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
+        breakpoint="lg"
         collapsible
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
@@ -58,23 +91,39 @@ const PageLayout = ({ children }: Props): JSX.Element => {
       </Sider>
       <Layout>
         <Header style={{ padding: 0 }}>
-          <Switch
-            checkedChildren="Loading"
-            unCheckedChildren="Not Loading"
-            defaultChecked={false}
-            onChange={handleLoadingChange}
-          />
+          <Row
+            justify="space-between"
+            style={{
+              padding: '0px 24px',
+            }}
+          >
+            <Col>
+              <Title style={{ color: '#FFFFFF' }} level={3}>
+                {pageTitles[location.pathname]}
+              </Title>
+            </Col>
+            {locationsToShowSwitches.includes(location.pathname) && (
+              <Col>
+                <Space size="large">
+                  <Switch
+                    checkedChildren="Loading"
+                    unCheckedChildren="Not Loading"
+                    defaultChecked={false}
+                    onChange={handleLoadingChange}
+                  />
 
-          <Switch
-            checkedChildren="Submitting"
-            unCheckedChildren="Not Submitting"
-            defaultChecked={false}
-            onChange={handleSubmit}
-            style={{ marginLeft: 16 }}
-          />
+                  <Switch
+                    checkedChildren="Submitting"
+                    unCheckedChildren="Not Submitting"
+                    defaultChecked={false}
+                    onChange={handleSubmit}
+                  />
+                </Space>
+              </Col>
+            )}
+          </Row>
         </Header>
-
-        <Content style={{ margin: '0 16px' }}>{children}</Content>
+        <Content style={{ padding: 24 }}>{children}</Content>
       </Layout>
     </Layout>
   );

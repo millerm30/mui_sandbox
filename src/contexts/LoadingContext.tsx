@@ -1,4 +1,3 @@
-// LoadingContext.ts
 import { createContext } from 'react';
 
 interface LoadingContextType {
