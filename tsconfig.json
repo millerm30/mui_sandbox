@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "~assets/*": [
+        "src/assets/*"
+      ],
+      "~components/*": [
+        "src/components/*"
+      ],
+      "~/*": [
+        "src/*"
+      ],
+      "~Layout/*": [
+        "src/Layout/*"
+      ],
+      "~containers/*": [
+        "src/containers/*"
+      ],
+      "~contexts/*": [
+        "src/contexts/*"
+      ],
+      "~hooks/*": [
+        "src/hooks/*"
+      ]
+    }
+  }
+}
