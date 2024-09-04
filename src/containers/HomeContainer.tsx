@@ -1,9 +1,20 @@
+import { Col, Row, Typography } from 'antd';
+
+const { Title, Paragraph } = Typography;
+
 const HomeContainer = () => {
   return (
-    <div>
-      <h1 style={{ marginTop: 0 }}>Home</h1>
-      <p>Ant Design Testing Sandbox!</p>
-    </div>
+    <Row>
+      <Col span={24}>
+        <Title style={{ marginTop: 0 }} level={2}>
+          Welcome
+        </Title>
+        <Paragraph>
+          Ant Design local sandbox for development and testing features and
+          components.
+        </Paragraph>
+      </Col>
+    </Row>
   );
 };
 

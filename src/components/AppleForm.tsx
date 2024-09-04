@@ -1,4 +1,4 @@
-import { Card, Button, Row, Col, Typography, Form, Input } from 'antd';
+import { Button, Card, Col, Form, Input, Row, Typography } from 'antd';
 import { AppleFilled } from '@ant-design/icons';
 
 const { Title } = Typography;
@@ -13,7 +13,6 @@ const AppleFormContainer = ({
 }) => {
   return (
     <Card
-      style={{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}
       title={
         <Title level={3} style={{ margin: 0 }}>
           APN
@@ -53,9 +52,9 @@ const AppleFormContainer = ({
             >
               <TextArea
                 allowClear
+                placeholder="---Enter Your Key---"
                 rows={5}
                 style={{ resize: 'none' }}
-                placeholder="---Enter Your Key---"
               />
             </Form.Item>
           </Col>
@@ -85,11 +84,11 @@ const AppleFormContainer = ({
         <Row justify={'end'}>
           <Button
             htmlType="submit"
-            loading={isSubmitting}
             iconPosition="end"
+            loading={isSubmitting}
             size="middle"
-            type="primary"
             style={{ width: 130 }}
+            type="primary"
           >
             {isSubmitting ? 'Submitting' : 'Submit'}
           </Button>

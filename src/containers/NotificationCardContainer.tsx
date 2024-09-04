@@ -1,4 +1,5 @@
-import { Row, Col, Grid } from 'antd';
+import { useEffect, useState } from 'react';
+import { Row, Col, Grid, Spin } from 'antd';
 import NotificationCard from '~components/NotificationCard';
 
 const { useBreakpoint } = Grid;
@@ -9,7 +10,7 @@ interface NotificationData {
   description: string;
 }
 
-const NotificationsData: NotificationData[] = [
+const notificationsData: NotificationData[] = [
   {
     id: 1,
     title: 'Title One Notification Card',
@@ -31,10 +32,35 @@ const NotificationsData: NotificationData[] = [
 
 const NotificationCardContainer = () => {
   const screens = useBreakpoint();
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState<NotificationData[] | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setData(notificationsData);
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Spin
+        size="large"
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      />
+    );
+  }
 
   return (
     <Row gutter={[24, 24]}>
-      {NotificationsData.map((notification) => (
+      {data?.map((notification) => (
         <Col key={notification.id} span={screens.xl ? 12 : 24}>
           <NotificationCard
             title={notification.title}

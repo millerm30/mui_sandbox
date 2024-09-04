@@ -1,4 +1,4 @@
-import { Card, Button, Row, Col, Typography, Form, Input } from 'antd';
+import { Button, Col, Card, Form, Input, Row, Typography } from 'antd';
 import { AndroidFilled } from '@ant-design/icons';
 
 const { Title } = Typography;
@@ -13,7 +13,7 @@ const AndroidFormContainer = ({
 }) => {
   return (
     <Card
-      style={{ boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', height: '100%' }}
+      style={{ height: '100%' }}
       title={
         <Title level={3} style={{ margin: 0 }}>
           Android FCM
@@ -36,11 +36,11 @@ const AndroidFormContainer = ({
               ]}
             >
               <TextArea
-                name="serviceAccountJson"
                 allowClear
+                name="serviceAccountJson"
+                placeholder="{}"
                 rows={12}
                 style={{ resize: 'none' }}
-                placeholder="{}"
               />
             </Form.Item>
           </Col>
@@ -50,11 +50,11 @@ const AndroidFormContainer = ({
             <Form.Item>
               <Button
                 htmlType="submit"
+                iconPosition="end"
                 loading={isSubmitting}
                 size="middle"
-                type="primary"
                 style={{ width: 130 }}
-                iconPosition="end"
+                type="primary"
               >
                 {isSubmitting ? 'Submitting' : 'Submit'}
               </Button>

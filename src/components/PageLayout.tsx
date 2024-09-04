@@ -5,14 +5,14 @@ import {
   IdcardOutlined,
 } from '@ant-design/icons';
 import {
+  Col,
   Layout,
   Menu,
-  Switch,
   MenuProps,
+  Row,
+  Switch,
   Space,
   Typography,
-  Row,
-  Col,
 } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import { useLoadingContext } from '../hooks/useLoadingContext';
@@ -83,13 +83,13 @@ const PageLayout = ({ children }: Props): JSX.Element => {
       >
         <div className="demo-logo-vertical" />
         <Menu
-          theme="dark"
           defaultSelectedKeys={['1']}
-          mode="inline"
           items={items}
+          mode="inline"
+          theme="dark"
         />
       </Sider>
-      <Layout>
+      <Layout style={{ backgroundColor: '#001529' }}>
         <Header style={{ padding: 0 }}>
           <Row
             justify="space-between"
@@ -123,7 +123,15 @@ const PageLayout = ({ children }: Props): JSX.Element => {
             )}
           </Row>
         </Header>
-        <Content style={{ padding: 24 }}>{children}</Content>
+        <Content
+          style={{
+            padding: 24,
+            backgroundColor: '#f5f5f5',
+            borderTopLeftRadius: 8,
+          }}
+        >
+          {children}
+        </Content>
       </Layout>
     </Layout>
   );
