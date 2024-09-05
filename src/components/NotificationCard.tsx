@@ -1,17 +1,85 @@
 import React from 'react';
-import { Card, Dropdown, MenuProps, Popover, Typography } from 'antd';
-import { EditFilled } from '@ant-design/icons';
+import {
+  Button,
+  Card,
+  Dropdown,
+  MenuProps,
+  Popover,
+  Row,
+  Col,
+  Typography,
+  Tag,
+} from 'antd';
+import {
+  EditFilled,
+  BellOutlined,
+  ChromeOutlined,
+  MailOutlined,
+  MessageOutlined,
+  MobileOutlined,
+  PhoneOutlined,
+} from '@ant-design/icons';
+import { blue } from '@ant-design/colors';
 
 const { Text, Paragraph } = Typography;
 
-interface NotificationCardProps {
-  title: string;
-  description: string;
+enum Channels {
+  EMAIL = 'EMAIL',
+  INAPP_WEB = 'INAPP_WEB',
+  WEB_PUSH = 'WEB_PUSH',
+  PUSH = 'PUSH',
+  SMS = 'SMS',
+  CALL = 'CALL',
 }
+
+interface NotificationCardProps {
+  notificationId: string;
+  title: string;
+  enabled?: boolean;
+  channels: Channels[];
+  deduplication?: boolean;
+}
+
+const getChannelIcon = (channel: Channels): React.ReactElement => {
+  switch (channel) {
+    case Channels.EMAIL:
+      return <MailOutlined style={{ color: blue.primary }} />;
+    case Channels.SMS:
+      return <MessageOutlined style={{ color: blue.primary }} />;
+    case Channels.PUSH:
+      return <MobileOutlined style={{ color: blue.primary }} />;
+    case Channels.CALL:
+      return <PhoneOutlined style={{ color: blue.primary }} />;
+    case Channels.INAPP_WEB:
+      return <BellOutlined style={{ color: blue.primary }} />;
+    case Channels.WEB_PUSH:
+      return <ChromeOutlined style={{ color: blue.primary }} />;
+    default:
+      return <MailOutlined style={{ color: blue.primary }} />;
+  }
+};
 
 const NotificationCard: React.FC<NotificationCardProps> = (props) => {
   const onMenuClick: MenuProps['onClick'] = (e) => {
     console.log('click', e);
+  };
+
+  const channelShortNames: Record<Channels, string> = {
+    EMAIL: 'Email',
+    INAPP_WEB: 'In-App',
+    SMS: 'SMS',
+    CALL: 'Call',
+    PUSH: 'Push',
+    WEB_PUSH: 'Web Push',
+  };
+
+  const getChannelShortName = (channel: string | undefined): string => {
+    return channelShortNames[channel as Channels] || channel || '';
+  };
+
+  const getChannelTagText = (channel: Channels) => {
+    const text = getChannelShortName(channel as Channels);
+    return text;
   };
 
   const items = [
@@ -105,21 +173,60 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
 
   return (
     <Card
-      title={`${props.title}`}
-      actions={[
-        <span onClick={() => console.log('Edit clicked')}>
-          <>
-            <EditFilled /> Edit
-          </>
-        </span>,
-      ]}
-      extra={
-        <Dropdown.Button menu={{ items, onClick: onMenuClick }}>
-          Actions
-        </Dropdown.Button>
+      title={
+        <>
+          <Text>{props.title}</Text>
+          {!props.enabled && (
+            <Tag style={{ marginLeft: '8px' }} color="orange">
+              Disabled
+            </Tag>
+          )}
+        </>
       }
+      actions={[
+        <Row gutter={[24, 24]} justify="end" style={{ marginRight: 12 }}>
+          <Col>
+            <Button
+              type="primary"
+              onClick={() => console.log('Edit clicked')}
+              icon={<EditFilled />}
+            >
+              Edit
+            </Button>
+          </Col>
+          <Col>
+            <Dropdown.Button menu={{ items, onClick: onMenuClick }}>
+              Actions
+            </Dropdown.Button>
+          </Col>
+        </Row>,
+      ]}
     >
-      <Paragraph style={{ marginBottom: 0 }}>{props.description}</Paragraph>
+      <Row gutter={16}>
+        <Col xs={24} md={12}>
+          <Row gutter={[16, 8]}>
+            <Col>
+              {props.channels.map((c) => (
+                <Tag
+                  key={c}
+                  icon={getChannelIcon(c as Channels)}
+                  style={{ marginBottom: 8 }}
+                >
+                  {getChannelTagText(c as Channels)}
+                </Tag>
+              ))}
+            </Col>
+            <Col span={24}>
+              <Text type="secondary">ID:</Text>{' '}
+              <Text>{props.notificationId}</Text>
+            </Col>
+            <Col span={24}>
+              <Text type="secondary">Options:</Text>{' '}
+              {props.deduplication ? 'Deduplication' : 'none'}
+            </Col>
+          </Row>
+        </Col>
+      </Row>
     </Card>
   );
 };

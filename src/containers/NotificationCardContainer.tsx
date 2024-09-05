@@ -1,32 +1,54 @@
 import { useEffect, useState } from 'react';
-import { Row, Col, Grid, Spin } from 'antd';
+import { Col, Grid, Row, Spin } from 'antd';
 import NotificationCard from '~components/NotificationCard';
 
 const { useBreakpoint } = Grid;
 
+enum Channels {
+  EMAIL = 'EMAIL',
+  INAPP_WEB = 'INAPP_WEB',
+  WEB_PUSH = 'WEB_PUSH',
+  PUSH = 'PUSH',
+  SMS = 'SMS',
+  CALL = 'CALL',
+}
+
 interface NotificationData {
   id: number;
+  notificationId: string;
   title: string;
-  description: string;
+  enabled?: boolean;
+  channels: Channels[];
 }
 
 const notificationsData: NotificationData[] = [
   {
     id: 1,
+    notificationId: 'title_one_notification_card',
     title: 'Title One Notification Card',
-    description:
-      'This is the content of the notification, it can be long or short, depending on the content.',
+    enabled: true,
+    channels: [Channels.EMAIL, Channels.SMS],
   },
   {
     id: 2,
+    notificationId: 'title_two_this_is_a_notification_card',
     title: 'Title Two This Is A Notification Card',
-    description: 'Notification Description Two, this is a short one.',
+    enabled: false,
+    channels: [Channels.PUSH, Channels.INAPP_WEB],
   },
   {
     id: 3,
+    notificationId: 'title_three_notification_card_test',
     title: 'Title Three Notification Card Test',
-    description:
-      'Notification Description Three, this is a long one. It can be long or short. It depends on the content. This is a long one. It can be long or short. It depends on the content.',
+    enabled: true,
+    channels: [
+      Channels.EMAIL,
+      Channels.SMS,
+      Channels.PUSH,
+      Channels.INAPP_WEB,
+      Channels.WEB_PUSH,
+      Channels.CALL,
+    ],
   },
 ];
 
@@ -64,7 +86,9 @@ const NotificationCardContainer = () => {
         <Col key={notification.id} span={screens.xl ? 12 : 24}>
           <NotificationCard
             title={notification.title}
-            description={notification.description}
+            notificationId={notification.notificationId}
+            enabled={notification.enabled}
+            channels={notification.channels}
           />
         </Col>
       ))}

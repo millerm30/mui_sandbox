@@ -11,6 +11,7 @@
     "prettier-run": "prettier --check ."
   },
   "dependencies": {
+    "@ant-design/colors": "^7.1.0",
     "@ant-design/icons": "^5.4.0",
     "antd": "^5.20.3",
     "react": "^18.3.1",
