@@ -67,7 +67,7 @@ const NotificationCardContainer = () => {
   return (
     <Row gutter={[24, 24]}>
       {data?.map((notification) => (
-        <Col key={notification.id} span={screens.xl ? 12 : 24}>
+        <Col key={notification.id} span={screens.xl ? 13 : 24}>
           <NotificationCard
             title={notification.title}
             notificationId={notification.notificationId}

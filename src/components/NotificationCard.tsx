@@ -20,7 +20,28 @@ import {
   PhoneOutlined,
 } from '@ant-design/icons';
 import { blue } from '@ant-design/colors';
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import { Channels, NotificationCardProps } from '../types';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+);
 
 const { Text, Paragraph } = Typography;
 
@@ -64,6 +85,31 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
   const getChannelTagText = (channel: Channels) => {
     const text = getChannelShortName(channel as Channels);
     return text;
+  };
+
+  const data = {
+    labels: [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ],
+    datasets: [
+      {
+        label: 'My First dataset',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: [0, 10, 5, 2, 20, 30],
+      },
+    ],
   };
 
   const items = [
@@ -168,7 +214,7 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
         </>
       }
       actions={[
-        <Row gutter={[24, 24]} justify="end" style={{ marginRight: 12 }}>
+        <Row gutter={12} justify="end" style={{ marginRight: 4 }}>
           <Col>
             <Button
               type="primary"
@@ -186,8 +232,8 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
         </Row>,
       ]}
     >
-      <Row gutter={16}>
-        <Col xs={24} md={12}>
+      <Row style={{ marginBottom: 24 }}>
+        <Col span={24}>
           <Row gutter={[16, 8]}>
             <Col>
               {props.channels.map((c) => (
@@ -209,6 +255,45 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
               {props.deduplication ? 'Deduplication' : 'none'}
             </Col>
           </Row>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <Line
+            options={{
+              layout: {
+                padding: 10,
+              },
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                tooltip: {
+                  padding: 20,
+                  titleMarginBottom: 10,
+                  boxHeight: 0,
+                  boxWidth: 0,
+                  backgroundColor: 'rgba(0,0,0,0.7)',
+                },
+              },
+              interaction: {
+                mode: 'nearest',
+                axis: 'x',
+                intersect: false,
+              },
+              scales: {
+                x: {
+                  display: false,
+                },
+                yAxes: {
+                  display: false,
+                },
+              },
+            }}
+            data={data}
+          />
         </Col>
       </Row>
     </Card>
