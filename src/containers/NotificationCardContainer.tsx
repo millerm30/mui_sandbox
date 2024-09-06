@@ -1,25 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Col, Grid, Row, Spin } from 'antd';
 import NotificationCard from '~components/NotificationCard';
+import { Channels, NotificationData } from '../types';
 
 const { useBreakpoint } = Grid;
-
-enum Channels {
-  EMAIL = 'EMAIL',
-  INAPP_WEB = 'INAPP_WEB',
-  WEB_PUSH = 'WEB_PUSH',
-  PUSH = 'PUSH',
-  SMS = 'SMS',
-  CALL = 'CALL',
-}
-
-interface NotificationData {
-  id: number;
-  notificationId: string;
-  title: string;
-  enabled?: boolean;
-  channels: Channels[];
-}
 
 const notificationsData: NotificationData[] = [
   {

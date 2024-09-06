@@ -20,25 +20,9 @@ import {
   PhoneOutlined,
 } from '@ant-design/icons';
 import { blue } from '@ant-design/colors';
+import { Channels, NotificationCardProps } from '../types';
 
 const { Text, Paragraph } = Typography;
-
-enum Channels {
-  EMAIL = 'EMAIL',
-  INAPP_WEB = 'INAPP_WEB',
-  WEB_PUSH = 'WEB_PUSH',
-  PUSH = 'PUSH',
-  SMS = 'SMS',
-  CALL = 'CALL',
-}
-
-interface NotificationCardProps {
-  notificationId: string;
-  title: string;
-  enabled?: boolean;
-  channels: Channels[];
-  deduplication?: boolean;
-}
 
 const getChannelIcon = (channel: Channels): React.ReactElement => {
   switch (channel) {
