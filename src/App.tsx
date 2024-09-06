@@ -4,6 +4,7 @@ import PushContainer from './containers/PushContainer';
 import HomeContainer from './containers/HomeContainer';
 import NotificationCardContainer from './containers/NotificationCardContainer';
 import { LoadingProvider } from './contexts/LoadingProvider';
+import ScrollToTopButton from '~components/ScrollTopTopButton';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
               element={<NotificationCardContainer />}
             />
           </Routes>
+          <ScrollToTopButton />
         </PageLayout>
       </BrowserRouter>
     </LoadingProvider>

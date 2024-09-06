@@ -3,6 +3,8 @@ import {
   HomeOutlined,
   PushpinOutlined,
   IdcardOutlined,
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
 } from '@ant-design/icons';
 import {
   Col,
@@ -78,19 +80,27 @@ const PageLayout = ({ children }: Props): JSX.Element => {
         collapsible
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
-        style={{ paddingTop: 64 }}
+        style={{ paddingTop: 64, backgroundColor: '#202532' }}
         theme="dark"
+        trigger={
+          collapsed ? (
+            <ArrowRightOutlined style={{ color: '#FFFFFF' }} />
+          ) : (
+            <ArrowLeftOutlined style={{ color: '#FFFFFF' }} />
+          )
+        }
       >
-        <div className="demo-logo-vertical" />
         <Menu
+          rootClassName="mainMenu"
           defaultSelectedKeys={['1']}
           items={items}
           mode="inline"
           theme="dark"
+          style={{ backgroundColor: '#202532' }}
         />
       </Sider>
       <Layout style={{ backgroundColor: '#001529' }}>
-        <Header style={{ padding: 0 }}>
+        <Header style={{ padding: 0, backgroundColor: '#202532' }}>
           <Row
             justify="space-between"
             style={{
