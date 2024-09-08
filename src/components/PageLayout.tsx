@@ -18,6 +18,10 @@ import {
 } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import { useLoadingContext } from '../hooks/useLoadingContext';
+import {
+  NotificationPopup,
+  NotificationPreferencesPopup,
+} from '@notificationapi/react';
 
 const { Header, Content, Sider } = Layout;
 const { Title } = Typography;
@@ -68,6 +72,8 @@ const PageLayout = ({ children }: Props): JSX.Element => {
   const { handleLoadingChange, handleSubmit } = useLoadingContext();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+  const [preferencesPopupVisibility, setPreferencesPopupVisibility] =
+    useState(false);
 
   useEffect(() => {
     document.title = pageTitles[location.pathname];
@@ -112,6 +118,7 @@ const PageLayout = ({ children }: Props): JSX.Element => {
                 {pageTitles[location.pathname]}
               </Title>
             </Col>
+
             {locationsToShowSwitches.includes(location.pathname) && (
               <Col>
                 <Space size="large">
@@ -131,6 +138,13 @@ const PageLayout = ({ children }: Props): JSX.Element => {
                 </Space>
               </Col>
             )}
+            <Col>
+              <NotificationPopup buttonIconSize={24} />
+              <NotificationPreferencesPopup
+                open={preferencesPopupVisibility}
+                onClose={() => setPreferencesPopupVisibility(false)}
+              />
+            </Col>
           </Row>
         </Header>
         <Content
