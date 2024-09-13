@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": ["dom", "ES2016"],
+    "lib": [
+      "dom",
+      "ES2016"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "jsx": "react-jsx",
@@ -11,13 +14,27 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "~assets/*": ["src/assets/*"],
-      "~components/*": ["src/components/*"],
-      "~/*": ["src/*"],
-      "~Layout/*": ["src/Layout/*"],
-      "~containers/*": ["src/containers/*"],
-      "~contexts/*": ["src/contexts/*"],
-      "~hooks/*": ["src/hooks/*"]
+      "~assets/*": [
+        "src/assets/*"
+      ],
+      "~components/*": [
+        "src/components/*"
+      ],
+      "~/*": [
+        "src/*"
+      ],
+      "~Layout/*": [
+        "src/Layout/*"
+      ],
+      "~containers/*": [
+        "src/containers/*"
+      ],
+      "~contexts/*": [
+        "src/contexts/*"
+      ],
+      "~hooks/*": [
+        "src/hooks/*"
+      ]
     }
   }
 }

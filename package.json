@@ -13,7 +13,7 @@
   "dependencies": {
     "@ant-design/colors": "^7.1.0",
     "@ant-design/icons": "^5.4.0",
-    "@notificationapi/react": "^0.0.26",
+    "@notificationapi/react": "^0.0.28",
     "antd": "^5.20.3",
     "chart.js": "^4.4.4",
     "react": "^18.3.1",
