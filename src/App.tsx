@@ -12,6 +12,7 @@ export default function App() {
     <NotificationAPIProvider
       userId={import.meta.env.VITE_USER_ID}
       clientId={import.meta.env.VITE_CLIENT_ID}
+      playSoundOnNewNotification={true}
     >
       <LoadingProvider>
         <BrowserRouter>
