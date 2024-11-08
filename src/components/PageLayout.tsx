@@ -139,7 +139,11 @@ const PageLayout = ({ children }: Props): JSX.Element => {
               </Col>
             )}
             <Col>
-              <NotificationPopup buttonIconSize={24} iconColor="#FFFFFF" />
+              <NotificationPopup
+                buttonIconSize={24}
+                iconColor="#FFFFFF"
+                filter="UNARCHIVED"
+              />
               <NotificationPreferencesPopup
                 open={preferencesPopupVisibility}
                 onClose={() => setPreferencesPopupVisibility(false)}
