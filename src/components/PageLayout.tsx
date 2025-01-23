@@ -22,7 +22,6 @@ import {
   NotificationPopup,
   NotificationPreferencesPopup,
 } from '@notificationapi/react';
-import { NotificationAPIProvider } from '@notificationapi/react';
 
 const { Header, Content, Sider } = Layout;
 const { Title } = Typography;
@@ -140,21 +139,11 @@ const PageLayout = ({ children }: Props): JSX.Element => {
               </Col>
             )}
             <Col>
-              <NotificationAPIProvider
-                userId={import.meta.env.VITE_USER_ID}
-                clientId={import.meta.env.VITE_CLIENT_ID}
-                webPushOptInMessage="AUTOMATIC"
-              >
-                <NotificationPopup
-                  buttonIconSize={24}
-                  iconColor="#FFFFFF"
-                  filter="UNARCHIVED"
-                />
-                <NotificationPreferencesPopup
-                  open={preferencesPopupVisibility}
-                  onClose={() => setPreferencesPopupVisibility(false)}
-                />
-              </NotificationAPIProvider>
+              <NotificationPopup buttonIconSize={24} iconColor="#FFFFFF" />
+              <NotificationPreferencesPopup
+                open={preferencesPopupVisibility}
+                onClose={() => setPreferencesPopupVisibility(false)}
+              />
             </Col>
           </Row>
         </Header>
