@@ -14,13 +14,16 @@ const customTheme = createTheme({
       main: '#1677ff',
     },
     secondary: {
-      main: '#d9d9d9',
+      main: '#808080',
     },
     error: {
       main: '#FF2D55',
     },
     success: {
       main: '#37B877',
+    },
+    text: {
+      secondary: '#8C8C8C',
     },
   },
 });

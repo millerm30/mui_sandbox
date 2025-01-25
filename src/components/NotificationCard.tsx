@@ -1,25 +1,30 @@
 import React from 'react';
 import {
   Button,
+  ButtonGroup,
   Card,
-  Dropdown,
-  MenuProps,
-  Popover,
-  Row,
-  Col,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Chip,
+  Divider,
   Typography,
-  Tag,
-} from 'antd';
+  Popover,
+  Grid2,
+  MenuProps,
+  Menu,
+  MenuItem,
+} from '@mui/material';
 import {
-  EditFilled,
-  BellOutlined,
-  ChromeOutlined,
+  ModeEdit,
   MailOutlined,
   MessageOutlined,
-  MobileOutlined,
-  PhoneOutlined,
-} from '@ant-design/icons';
-import { blue } from '@ant-design/colors';
+  Smartphone,
+  Phone,
+  NotificationsNoneOutlined,
+  LanguageOutlined,
+  ArrowDropDown,
+} from '@mui/icons-material';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -43,24 +48,22 @@ ChartJS.register(
   Legend,
 );
 
-const { Text, Paragraph } = Typography;
-
 const getChannelIcon = (channel: Channels): React.ReactElement => {
   switch (channel) {
     case Channels.EMAIL:
-      return <MailOutlined style={{ color: blue.primary }} />;
+      return <MailOutlined color="primary" fontSize="small" />;
     case Channels.SMS:
-      return <MessageOutlined style={{ color: blue.primary }} />;
+      return <MessageOutlined color="primary" fontSize="small" />;
     case Channels.PUSH:
-      return <MobileOutlined style={{ color: blue.primary }} />;
+      return <Smartphone color="primary" fontSize="small" />;
     case Channels.CALL:
-      return <PhoneOutlined style={{ color: blue.primary }} />;
+      return <Phone color="primary" fontSize="small" />;
     case Channels.INAPP_WEB:
-      return <BellOutlined style={{ color: blue.primary }} />;
+      return <NotificationsNoneOutlined color="primary" fontSize="small" />;
     case Channels.WEB_PUSH:
-      return <ChromeOutlined style={{ color: blue.primary }} />;
+      return <LanguageOutlined color="primary" fontSize="small" />;
     default:
-      return <MailOutlined style={{ color: blue.primary }} />;
+      return <MailOutlined color="primary" fontSize="small" />;
   }
 };
 
@@ -119,11 +122,11 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
           arrow={false}
           content={
             <div style={{ maxWidth: '300px' }}>
-              <Paragraph style={{ marginBottom: 0 }}>
+              <Typography style={{ marginBottom: 0 }} variant="body2">
                 Duplicating a notification will create a new notification with
                 the same content and settings. The new notification will have a
                 different notification
-              </Paragraph>
+              </Typography>
             </div>
           }
           placement="right"
@@ -134,7 +137,7 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
           mouseEnterDelay={0.1}
         >
           <div>
-            <Text style={{ padding: 24 }}>Duplicate</Text>
+            <Typography style={{ padding: 24 }}>Duplicate</Typography>
           </div>
         </Popover>
       ),
@@ -146,12 +149,12 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
           arrow={false}
           content={
             <div style={{ maxWidth: '300px' }}>
-              <Paragraph style={{ marginBottom: 0 }}>
+              <Typography style={{ marginBottom: 0 }}>
                 Disabling a notification causes requests with this
                 notificationId to be ignored without any adverse side-effects.
                 Your code will continue to work as before, but the API/SDK will
                 return soft warnings.
-              </Paragraph>
+              </Typography>
             </div>
           }
           placement="right"
@@ -162,9 +165,9 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
           mouseEnterDelay={0.1}
         >
           <div>
-            <Text style={{ padding: 24 }} type="warning">
+            <Typography style={{ padding: 24 }} variant="body1" color="error">
               Disable
-            </Text>
+            </Typography>
           </div>
         </Popover>
       ),
@@ -176,11 +179,11 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
           arrow={false}
           content={
             <div style={{ maxWidth: '300px' }}>
-              <Paragraph style={{ marginBottom: 0 }}>
+              <Typography style={{ marginBottom: 0 }}>
                 Deleting a notification cannot be undone. It will cause all
                 requests with this notificationId to throw an error. Before
                 removing a notification, disable it and review the logs.
-              </Paragraph>
+              </Typography>
             </div>
           }
           placement="right"
@@ -191,9 +194,9 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
           mouseEnterDelay={0.1}
         >
           <div>
-            <Text style={{ padding: 24 }} type="danger">
+            <Typography style={{ padding: 24 }} variant="body1" color="error">
               Delete
-            </Text>
+            </Typography>
           </div>
         </Popover>
       ),
@@ -202,100 +205,140 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
   ];
 
   return (
-    <Card
-      title={
-        <>
-          <Text>{props.title}</Text>
-          {!props.enabled && (
-            <Tag style={{ marginLeft: '8px' }} color="orange">
-              Disabled
-            </Tag>
-          )}
-        </>
-      }
-      actions={[
-        <Row gutter={12} justify="end" style={{ marginRight: 4 }}>
-          <Col>
+    <Card variant="outlined" sx={{ borderRadius: 2 }}>
+      <CardHeader
+        title={
+          <>
+            <Typography variant="subtitle1" lineHeight={1}>
+              {props.title}
+            </Typography>
+          </>
+        }
+        action={
+          !props.enabled && (
+            <Chip
+              label="Disabled"
+              color="warning"
+              variant="outlined"
+              size="small"
+              sx={{ borderRadius: 1 }}
+            />
+          )
+        }
+      />
+      <Divider />
+      <CardContent>
+        <Grid2 container spacing={2}>
+          <Grid2 container flexDirection="column" spacing={1}>
+            <Grid2 container flexDirection="row" spacing={1}>
+              {props.channels.map((c) => (
+                <Chip
+                  key={c}
+                  icon={getChannelIcon(c as Channels)}
+                  label={getChannelTagText(c as Channels)}
+                  variant="outlined"
+                  color="default"
+                  sx={{ borderRadius: 1 }}
+                  size="small"
+                />
+              ))}
+            </Grid2>
+            <Grid2 container flexDirection="row" spacing={1}>
+              <Typography color="textSecondary" variant="body2">
+                ID:
+              </Typography>
+              <Typography variant="body2">{props.notificationId}</Typography>
+            </Grid2>
+            <Grid2 container flexDirection="row" spacing={1}>
+              <Typography color="textSecondary" variant="body2">
+                Options:
+              </Typography>
+              <Typography variant="body2">
+                {props.deduplication ? 'Deduplication' : 'none'}
+              </Typography>
+            </Grid2>
+          </Grid2>
+          <Grid2 container size={12}>
+            <Grid2 size={12}>
+              <Line
+                options={{
+                  layout: {
+                    padding: 10,
+                  },
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                    tooltip: {
+                      padding: 20,
+                      titleMarginBottom: 10,
+                      boxHeight: 0,
+                      boxWidth: 0,
+                      backgroundColor: 'rgba(0,0,0,0.7)',
+                    },
+                  },
+                  interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false,
+                  },
+                  scales: {
+                    x: {
+                      display: false,
+                    },
+                    yAxes: {
+                      display: false,
+                    },
+                  },
+                }}
+                data={data}
+              />
+            </Grid2>
+          </Grid2>
+        </Grid2>
+      </CardContent>
+      <Divider />
+      <CardActions
+        sx={{ display: 'flex', justifyContent: 'flex-end', padding: 2 }}
+      >
+        <Grid2 container spacing={1}>
+          <Grid2>
             <Button
-              type="primary"
+              variant="contained"
+              color="primary"
+              size="small"
+              sx={{ textTransform: 'none' }}
               onClick={() => console.log('Edit clicked')}
-              icon={<EditFilled />}
+              startIcon={<ModeEdit />}
             >
               Edit
             </Button>
-          </Col>
-          <Col>
-            <Dropdown.Button menu={{ items, onClick: onMenuClick }}>
-              Actions
-            </Dropdown.Button>
-          </Col>
-        </Row>,
-      ]}
-    >
-      <Row style={{ marginBottom: 24 }}>
-        <Col span={24}>
-          <Row gutter={[16, 8]}>
-            <Col>
-              {props.channels.map((c) => (
-                <Tag
-                  key={c}
-                  icon={getChannelIcon(c as Channels)}
-                  style={{ marginBottom: 8 }}
-                >
-                  {getChannelTagText(c as Channels)}
-                </Tag>
-              ))}
-            </Col>
-            <Col span={24}>
-              <Text type="secondary">ID:</Text>{' '}
-              <Text>{props.notificationId}</Text>
-            </Col>
-            <Col span={24}>
-              <Text type="secondary">Options:</Text>{' '}
-              {props.deduplication ? 'Deduplication' : 'none'}
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-      <Row>
-        <Col span={24}>
-          <Line
-            options={{
-              layout: {
-                padding: 10,
-              },
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  display: false,
-                },
-                tooltip: {
-                  padding: 20,
-                  titleMarginBottom: 10,
-                  boxHeight: 0,
-                  boxWidth: 0,
-                  backgroundColor: 'rgba(0,0,0,0.7)',
-                },
-              },
-              interaction: {
-                mode: 'nearest',
-                axis: 'x',
-                intersect: false,
-              },
-              scales: {
-                x: {
-                  display: false,
-                },
-                yAxes: {
-                  display: false,
-                },
-              },
-            }}
-            data={data}
-          />
-        </Col>
-      </Row>
+          </Grid2>
+          <Grid2>
+            <ButtonGroup variant="outlined" color="secondary">
+              <Button
+                variant="outlined"
+                color="secondary"
+                size="small"
+                sx={{ textTransform: 'none', color: 'black' }}
+              >
+                Actions
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                size="small"
+                onClick={() => console.log('View clicked')}
+              >
+                <ArrowDropDown />
+              </Button>
+            </ButtonGroup>
+            <Menu></Menu>
+          </Grid2>
+        </Grid2>
+      </CardActions>
     </Card>
   );
 };
