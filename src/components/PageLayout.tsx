@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
   HomeOutlined,
-  PushpinOutlined,
-  IdcardOutlined,
-  ArrowLeftOutlined,
-  ArrowRightOutlined,
-} from '@ant-design/icons';
-import {
-  Col,
-  Layout,
-  Menu,
-  MenuProps,
-  Row,
-  Switch,
-  Space,
-  Typography,
-} from 'antd';
+  PushPinOutlined,
+  BadgeOutlined,
+  WestOutlined,
+  EastOutlined,
+} from '@mui/icons-material';
+import { Layout, Menu, MenuProps } from 'antd';
+import { Typography, Switch, FormControlLabel, Grid2 } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { useLoadingContext } from '../hooks/useLoadingContext';
 import {
@@ -24,7 +16,6 @@ import {
 } from '@notificationapi/react';
 
 const { Header, Content, Sider } = Layout;
-const { Title } = Typography;
 
 interface Props {
   children?: React.ReactNode;
@@ -51,12 +42,12 @@ const items: MenuItem[] = [
   getItem(
     <Link to="/push-notifications">Push Notifications</Link>,
     '2',
-    <PushpinOutlined />,
+    <PushPinOutlined />,
   ),
   getItem(
     <Link to="/notification-card">Notification Card</Link>,
     '3',
-    <IdcardOutlined />,
+    <BadgeOutlined />,
   ),
 ];
 
@@ -69,7 +60,8 @@ const pageTitles: { [key: string]: string } = {
 };
 
 const PageLayout = ({ children }: Props): JSX.Element => {
-  const { handleLoadingChange, handleSubmit } = useLoadingContext();
+  const { handleLoadingChange, handleSubmit, isLoading, isSubmitting } =
+    useLoadingContext();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [preferencesPopupVisibility, setPreferencesPopupVisibility] =
@@ -90,9 +82,9 @@ const PageLayout = ({ children }: Props): JSX.Element => {
         theme="dark"
         trigger={
           collapsed ? (
-            <ArrowRightOutlined style={{ color: '#FFFFFF' }} />
+            <EastOutlined style={{ color: '#FFFFFF' }} />
           ) : (
-            <ArrowLeftOutlined style={{ color: '#FFFFFF' }} />
+            <WestOutlined style={{ color: '#FFFFFF' }} />
           )
         }
       >
@@ -107,45 +99,48 @@ const PageLayout = ({ children }: Props): JSX.Element => {
       </Sider>
       <Layout style={{ backgroundColor: '#001529' }}>
         <Header style={{ padding: 0, backgroundColor: '#202532' }}>
-          <Row
-            justify="space-between"
-            style={{
-              padding: '0px 24px',
-            }}
-          >
-            <Col>
-              <Title style={{ color: '#FFFFFF' }} level={3}>
+          <Grid2 container alignItems="flex-end" justifyContent="space-between">
+            <Grid2 pl={3}>
+              <Typography color="#FFFFFF" variant="h5" marginBottom={1}>
                 {pageTitles[location.pathname]}
-              </Title>
-            </Col>
+              </Typography>
+            </Grid2>
 
             {locationsToShowSwitches.includes(location.pathname) && (
-              <Col>
-                <Space size="large">
-                  <Switch
-                    checkedChildren="Loading"
-                    unCheckedChildren="Not Loading"
-                    defaultChecked={false}
-                    onChange={handleLoadingChange}
-                  />
+              <Grid2>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={isLoading}
+                      onChange={(event) => handleLoadingChange(event)}
+                      inputProps={{ 'aria-label': 'loading-switch' }}
+                    />
+                  }
+                  label="Show Loading"
+                  sx={{ color: '#FFFFFF' }}
+                />
 
-                  <Switch
-                    checkedChildren="Submitting"
-                    unCheckedChildren="Not Submitting"
-                    defaultChecked={false}
-                    onChange={handleSubmit}
-                  />
-                </Space>
-              </Col>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={isSubmitting}
+                      onChange={(event) => handleSubmit(event)}
+                      inputProps={{ 'aria-label': 'submitting-switch' }}
+                    />
+                  }
+                  label="Show Submitting"
+                  sx={{ color: '#FFFFFF' }}
+                />
+              </Grid2>
             )}
-            <Col>
+            <Grid2>
               <NotificationPopup buttonIconSize={24} iconColor="#FFFFFF" />
               <NotificationPreferencesPopup
                 open={preferencesPopupVisibility}
                 onClose={() => setPreferencesPopupVisibility(false)}
               />
-            </Col>
-          </Row>
+            </Grid2>
+          </Grid2>
         </Header>
         <Content
           style={{

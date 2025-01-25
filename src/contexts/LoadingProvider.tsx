@@ -9,12 +9,12 @@ export const LoadingProvider = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const handleLoadingChange = (checked: boolean) => {
-    setIsLoading(checked);
+  const handleLoadingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsLoading(event.target.checked);
   };
 
-  const handleSubmit = (checked: boolean) => {
-    setIsSubmitting(checked);
+  const handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSubmitting(event.target.checked);
   };
 
   return (
