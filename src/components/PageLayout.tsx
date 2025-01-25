@@ -15,7 +15,7 @@ import {
   NotificationPreferencesPopup,
 } from '@notificationapi/react';
 
-const { Header, Content, Sider } = Layout;
+const { Sider } = Layout;
 
 interface Props {
   children?: React.ReactNode;
@@ -98,51 +98,55 @@ const PageLayout = ({ children }: Props): JSX.Element => {
         />
       </Sider>
       <Layout style={{ backgroundColor: '#001529' }}>
-        <Header style={{ padding: 0, backgroundColor: '#202532' }}>
-          <Grid2 container alignItems="flex-end" justifyContent="space-between">
-            <Grid2 pl={3}>
-              <Typography color="#FFFFFF" variant="h5" marginBottom={1}>
-                {pageTitles[location.pathname]}
-              </Typography>
-            </Grid2>
+        <Grid2
+          container
+          justifyContent="space-between"
+          bgcolor={'#202532'}
+          height={64}
+        >
+          <Grid2 container pl={3} alignItems={'flex-end'}>
+            <Typography color="#FFFFFF" variant="h5" marginBottom={1}>
+              {pageTitles[location.pathname]}
+            </Typography>
+          </Grid2>
 
-            {locationsToShowSwitches.includes(location.pathname) && (
-              <Grid2>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={isLoading}
-                      onChange={(event) => handleLoadingChange(event)}
-                      inputProps={{ 'aria-label': 'loading-switch' }}
-                    />
-                  }
-                  label="Show Loading"
-                  sx={{ color: '#FFFFFF' }}
-                />
+          {locationsToShowSwitches.includes(location.pathname) && (
+            <Grid2 container alignItems={'flex-end'} marginBottom={1}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={isLoading}
+                    onChange={(event) => handleLoadingChange(event)}
+                    inputProps={{ 'aria-label': 'loading-switch' }}
+                  />
+                }
+                label="Show Loading"
+                sx={{ color: '#FFFFFF' }}
+              />
 
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={isSubmitting}
-                      onChange={(event) => handleSubmit(event)}
-                      inputProps={{ 'aria-label': 'submitting-switch' }}
-                    />
-                  }
-                  label="Show Submitting"
-                  sx={{ color: '#FFFFFF' }}
-                />
-              </Grid2>
-            )}
-            <Grid2>
-              <NotificationPopup buttonIconSize={24} iconColor="#FFFFFF" />
-              <NotificationPreferencesPopup
-                open={preferencesPopupVisibility}
-                onClose={() => setPreferencesPopupVisibility(false)}
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={isSubmitting}
+                    onChange={(event) => handleSubmit(event)}
+                    inputProps={{ 'aria-label': 'submitting-switch' }}
+                  />
+                }
+                label="Show Submitting"
+                sx={{ color: '#FFFFFF' }}
               />
             </Grid2>
+          )}
+          <Grid2 container alignItems={'center'} mx={2}>
+            <NotificationPopup buttonIconSize={24} iconColor="#FFFFFF" />
+            <NotificationPreferencesPopup
+              open={preferencesPopupVisibility}
+              onClose={() => setPreferencesPopupVisibility(false)}
+            />
           </Grid2>
-        </Header>
-        <Content
+        </Grid2>
+        <Grid2
+          height="100%"
           style={{
             padding: 24,
             backgroundColor: '#f5f5f5',
@@ -150,7 +154,7 @@ const PageLayout = ({ children }: Props): JSX.Element => {
           }}
         >
           {children}
-        </Content>
+        </Grid2>
       </Layout>
     </Layout>
   );
