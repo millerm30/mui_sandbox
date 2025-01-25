@@ -5,38 +5,51 @@ import HomeContainer from './containers/HomeContainer';
 import NotificationCardContainer from './containers/NotificationCardContainer';
 import { LoadingProvider } from './contexts/LoadingProvider';
 import ScrollToTopButton from '~components/ScrollTopTopButton';
-import {
-  NotificationAPIProvider,
-  NotificationLauncher,
-} from '@notificationapi/react';
+import { NotificationAPIProvider } from '@notificationapi/react';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+const customTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#1677ff',
+    },
+    secondary: {
+      main: '#d9d9d9',
+    },
+    error: {
+      main: '#FF2D55',
+    },
+    success: {
+      main: '#37B877',
+    },
+  },
+});
 
 export default function App() {
   return (
-    <NotificationAPIProvider
-      userId={import.meta.env.VITE_USER_ID}
-      clientId={import.meta.env.VITE_CLIENT_ID}
-      webPushOptInMessage="AUTOMATIC"
-      playSoundOnNewNotification={true}
-    >
-      <LoadingProvider>
-        <BrowserRouter>
-          <PageLayout>
-            <Routes>
-              <Route path="/" element={<HomeContainer />} />
-              <Route path="/push-notifications" element={<PushContainer />} />
-              <Route
-                path="/notification-card"
-                element={<NotificationCardContainer />}
-              />
-            </Routes>
-            <NotificationLauncher
-              buttonStyles={{ backgroundColor: 'black' }}
-              iconColor="white"
-            />
-            <ScrollToTopButton />
-          </PageLayout>
-        </BrowserRouter>
-      </LoadingProvider>
-    </NotificationAPIProvider>
+    <ThemeProvider theme={customTheme}>
+      <NotificationAPIProvider
+        userId={import.meta.env.VITE_USER_ID}
+        clientId={import.meta.env.VITE_CLIENT_ID}
+        webPushOptInMessage="AUTOMATIC"
+        playSoundOnNewNotification={true}
+      >
+        <LoadingProvider>
+          <BrowserRouter>
+            <PageLayout>
+              <Routes>
+                <Route path="/" element={<HomeContainer />} />
+                <Route path="/push-notifications" element={<PushContainer />} />
+                <Route
+                  path="/notification-card"
+                  element={<NotificationCardContainer />}
+                />
+              </Routes>
+              <ScrollToTopButton />
+            </PageLayout>
+          </BrowserRouter>
+        </LoadingProvider>
+      </NotificationAPIProvider>
+    </ThemeProvider>
   );
 }
