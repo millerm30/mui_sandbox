@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Col, Grid, Row, Spin } from 'antd';
 import NotificationCard from '~components/NotificationCard';
 import { Channels, NotificationData } from '../types';
-
-const { useBreakpoint } = Grid;
+import { Grid2, CircularProgress, Box } from '@mui/material';
 
 const notificationsData: NotificationData[] = [
   {
@@ -37,7 +35,6 @@ const notificationsData: NotificationData[] = [
 ];
 
 const NotificationCardContainer = () => {
-  const screens = useBreakpoint();
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<NotificationData[] | null>(null);
 
@@ -52,31 +49,33 @@ const NotificationCardContainer = () => {
 
   if (isLoading) {
     return (
-      <Spin
-        size="large"
-        style={{
+      <Box
+        component="section"
+        sx={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          height: '100vh',
+          height: '100%',
         }}
-      />
+      >
+        <CircularProgress color="primary" />
+      </Box>
     );
   }
 
   return (
-    <Row gutter={[24, 24]}>
+    <Grid2 container spacing={3}>
       {data?.map((notification) => (
-        <Col key={notification.id} span={screens.xl ? 13 : 24}>
+        <Grid2 key={notification.id} size={{ md: 12, lg: 10, xl: 8 }}>
           <NotificationCard
             title={notification.title}
             notificationId={notification.notificationId}
             enabled={notification.enabled}
             channels={notification.channels}
           />
-        </Col>
+        </Grid2>
       ))}
-    </Row>
+    </Grid2>
   );
 };
 
