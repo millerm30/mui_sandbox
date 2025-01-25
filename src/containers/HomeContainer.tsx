@@ -1,20 +1,18 @@
-import { Col, Row, Typography } from 'antd';
-
-const { Title, Paragraph } = Typography;
+import { Grid2, Typography } from '@mui/material';
 
 const HomeContainer = () => {
   return (
-    <Row>
-      <Col span={24}>
-        <Title style={{ marginTop: 0 }} level={2}>
+    <Grid2 container>
+      <Grid2 columns={12}>
+        <Typography style={{ marginTop: 0 }} variant="h4">
           Welcome
-        </Title>
-        <Paragraph>
+        </Typography>
+        <Typography variant="body1">
           Ant Design local sandbox for development and testing features and
           components.
-        </Paragraph>
-      </Col>
-    </Row>
+        </Typography>
+      </Grid2>
+    </Grid2>
   );
 };
 
