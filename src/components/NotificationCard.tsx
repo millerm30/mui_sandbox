@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   ButtonGroup,
+  ClickAwayListener,
   Card,
   CardHeader,
   CardContent,
@@ -9,11 +10,13 @@ import {
   Chip,
   Divider,
   Typography,
-  Popover,
+  Tooltip as MuiTooltip,
+  Popper,
+  Paper,
   Grid2,
-  MenuProps,
-  Menu,
+  Grow,
   MenuItem,
+  MenuList,
 } from '@mui/material';
 import {
   ModeEdit,
@@ -68,8 +71,32 @@ const getChannelIcon = (channel: Channels): React.ReactElement => {
 };
 
 const NotificationCard: React.FC<NotificationCardProps> = (props) => {
-  const onMenuClick: MenuProps['onClick'] = (e) => {
-    console.log('click', e);
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null,
+  );
+  const [popoverAnchorEl, setPopoverAnchorEl] = useState<null | HTMLElement>(
+    null,
+  );
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setOpen((prevOpen) => !prevOpen);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>) => {
+    setPopoverAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = (event: Event) => {
+    if (
+      popoverAnchorEl &&
+      popoverAnchorEl.contains(event.target as HTMLElement)
+    ) {
+      return;
+    }
+    setOpen(false);
+    setPopoverAnchorEl(null);
   };
 
   const channelShortNames: Record<Channels, string> = {
@@ -117,88 +144,35 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
 
   const items = [
     {
-      label: (
-        <Popover
-          arrow={false}
-          content={
-            <div style={{ maxWidth: '300px' }}>
-              <Typography style={{ marginBottom: 0 }} variant="body2">
-                Duplicating a notification will create a new notification with
-                the same content and settings. The new notification will have a
-                different notification
-              </Typography>
-            </div>
-          }
-          placement="right"
-          overlayStyle={{
-            paddingLeft: '24px',
-          }}
-          overlayInnerStyle={{ padding: '16px' }}
-          mouseEnterDelay={0.1}
-        >
-          <div>
-            <Typography style={{ padding: 24 }}>Duplicate</Typography>
-          </div>
-        </Popover>
+      label: 'Duplicate',
+      content: (
+        <Typography variant="body2">
+          Duplicating a notification will create a new notification with the
+          same content and settings. The new notification will have a different
+          notification ID.
+        </Typography>
       ),
       key: 'duplicate',
     },
     {
-      label: (
-        <Popover
-          arrow={false}
-          content={
-            <div style={{ maxWidth: '300px' }}>
-              <Typography style={{ marginBottom: 0 }}>
-                Disabling a notification causes requests with this
-                notificationId to be ignored without any adverse side-effects.
-                Your code will continue to work as before, but the API/SDK will
-                return soft warnings.
-              </Typography>
-            </div>
-          }
-          placement="right"
-          overlayStyle={{
-            paddingLeft: '24px',
-          }}
-          overlayInnerStyle={{ padding: '16px' }}
-          mouseEnterDelay={0.1}
-        >
-          <div>
-            <Typography style={{ padding: 24 }} variant="body1" color="error">
-              Disable
-            </Typography>
-          </div>
-        </Popover>
+      label: 'Disable',
+      content: (
+        <Typography variant="body2">
+          Disabling a notification causes requests with this notificationId to
+          be ignored without any adverse side-effects. Your code will continue
+          to work as before, but the API/SDK will return soft warnings.
+        </Typography>
       ),
       key: 'disable',
     },
     {
-      label: (
-        <Popover
-          arrow={false}
-          content={
-            <div style={{ maxWidth: '300px' }}>
-              <Typography style={{ marginBottom: 0 }}>
-                Deleting a notification cannot be undone. It will cause all
-                requests with this notificationId to throw an error. Before
-                removing a notification, disable it and review the logs.
-              </Typography>
-            </div>
-          }
-          placement="right"
-          overlayStyle={{
-            paddingLeft: '24px',
-          }}
-          overlayInnerStyle={{ padding: '16px' }}
-          mouseEnterDelay={0.1}
-        >
-          <div>
-            <Typography style={{ padding: 24 }} variant="body1" color="error">
-              Delete
-            </Typography>
-          </div>
-        </Popover>
+      label: 'Delete',
+      content: (
+        <Typography variant="body2">
+          Deleting a notification cannot be undone. It will cause all requests
+          with this notificationId to throw an error. Before removing a
+          notification, disable it and review the logs.
+        </Typography>
       ),
       key: 'delete',
     },
@@ -330,12 +304,48 @@ const NotificationCard: React.FC<NotificationCardProps> = (props) => {
                 variant="outlined"
                 color="secondary"
                 size="small"
-                onClick={() => console.log('View clicked')}
+                onClick={handleMenuClick}
               >
                 <ArrowDropDown />
               </Button>
             </ButtonGroup>
-            <Menu></Menu>
+            <Popper
+              open={open}
+              anchorEl={anchorEl}
+              transition
+              placement="bottom-end"
+            >
+              {({ TransitionProps }) => (
+                <Grow {...TransitionProps}>
+                  <Paper>
+                    <ClickAwayListener onClickAway={handleClose}>
+                      <MenuList id="split-button-menu">
+                        {items.map((item) => (
+                          <MuiTooltip
+                            key={item.key}
+                            title={item.content}
+                            placement="right"
+                            arrow
+                          >
+                            <MenuItem
+                              key={item.key}
+                              onMouseEnter={(event) =>
+                                handleMenuItemClick(event)
+                              }
+                              onMouseLeave={() => setPopoverAnchorEl(null)}
+                            >
+                              <Typography variant="body2">
+                                {item.label}
+                              </Typography>
+                            </MenuItem>
+                          </MuiTooltip>
+                        ))}
+                      </MenuList>
+                    </ClickAwayListener>
+                  </Paper>
+                </Grow>
+              )}
+            </Popper>
           </Grid2>
         </Grid2>
       </CardActions>
