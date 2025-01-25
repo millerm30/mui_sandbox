@@ -1,8 +1,15 @@
-import { Button, Card, Col, Form, Input, Row, Typography } from 'antd';
-import { AppleFilled } from '@ant-design/icons';
-
-const { Title } = Typography;
-const { TextArea } = Input;
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  TextField,
+  Button,
+  Grid2,
+  Typography,
+  Skeleton,
+} from '@mui/material';
+import { Apple } from '@mui/icons-material';
 
 const AppleFormContainer = ({
   isLoading,
@@ -12,88 +19,87 @@ const AppleFormContainer = ({
   isSubmitting: boolean;
 }) => {
   return (
-    <Card
-      title={
-        <Title level={3} style={{ margin: 0 }}>
-          APN
-        </Title>
-      }
-      extra={<AppleFilled style={{ fontSize: 24, color: '#808080' }} />}
-      loading={isLoading}
-    >
-      <Form layout="vertical" requiredMark={false}>
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item
-              label="Key ID:"
-              name={['keyId']}
-              rules={[
-                {
-                  required: true,
-                  message: 'Key ID is required',
-                },
-              ]}
-            >
-              <Input allowClear placeholder="Enter your KeyId" />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item
-              label="Key:"
-              name={['key']}
-              rules={[
-                {
-                  required: true,
-                  message: 'Key is required',
-                },
-              ]}
-            >
-              <TextArea
-                allowClear
-                placeholder="---Enter Your Key---"
-                rows={5}
-                style={{ resize: 'none' }}
+    <Card sx={{ height: '100%', borderRadius: 2 }} variant="outlined">
+      <CardHeader
+        title={
+          <Typography variant="h5" component="div" lineHeight={1.0}>
+            APN
+          </Typography>
+        }
+        avatar={<Apple style={{ fontSize: 24, color: '#808080' }} />}
+      />
+      <Divider />
+      <CardContent>
+        {isLoading ? (
+          <Grid2 container flexDirection={'column'} spacing={2}>
+            <Skeleton variant="rounded" animation="wave" />
+            <Skeleton variant="rounded" animation="wave" />
+            <Skeleton variant="rounded" animation="wave" />
+            <Skeleton
+              variant="rounded"
+              animation="wave"
+              sx={{ maxWidth: '75%' }}
+            />
+          </Grid2>
+        ) : (
+          <Grid2 container flexDirection={'column'} spacing={2}>
+            <Grid2>
+              <TextField
+                placeholder="Enter your KeyId"
+                label="key ID:"
+                fullWidth
+                sx={{ '& .MuiInputBase-root': { borderRadius: 2 } }}
+                size="small"
               />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item
-              label="Team:"
-              name={['team']}
-              rules={[{ required: true, message: 'Team is required' }]}
-            >
-              <Input allowClear placeholder="Enter your TeamId" />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item
-              label="Topic (App Bundle Id):"
-              name={['topic']}
-              rules={[{ required: true, message: 'Topic is required' }]}
-            >
-              <Input allowClear placeholder="App Bundle Id" />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row justify={'end'}>
-          <Button
-            htmlType="submit"
-            iconPosition="end"
-            loading={isSubmitting}
-            size="middle"
-            style={{ width: 130 }}
-            type="primary"
-          >
-            {isSubmitting ? 'Submitting' : 'Submit'}
-          </Button>
-        </Row>
-      </Form>
+            </Grid2>
+            <Grid2>
+              <TextField
+                placeholder="---Enter Your Key---"
+                label="Key:"
+                rows={5}
+                sx={{
+                  '& .MuiInputBase-root': { borderRadius: 2 },
+                  resize: 'none',
+                }}
+                multiline
+                fullWidth
+              />
+            </Grid2>
+            <Grid2>
+              <TextField
+                placeholder="Enter your TeamId"
+                label="Team:"
+                fullWidth
+                sx={{ '& .MuiInputBase-root': { borderRadius: 2 } }}
+                size="small"
+              />
+            </Grid2>
+            <Grid2>
+              <TextField
+                placeholder="App Bundle Id"
+                label="Top (App Bundle Id):"
+                fullWidth
+                sx={{ '& .MuiInputBase-root': { borderRadius: 2 } }}
+                size="small"
+              />
+            </Grid2>
+            <Grid2 container justifyContent="flex-end">
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                size="small"
+                disabled={isSubmitting}
+                sx={{ borderRadius: 2, width: 120, textTransform: 'none' }}
+                loading={isSubmitting}
+                loadingPosition="end"
+              >
+                {isSubmitting ? 'Submitting' : 'Submit'}
+              </Button>
+            </Grid2>
+          </Grid2>
+        )}
+      </CardContent>
     </Card>
   );
 };
