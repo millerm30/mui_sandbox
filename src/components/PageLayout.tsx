@@ -56,16 +56,16 @@ const pageTitles: { [key: string]: string } = {
   '/notification-card': 'Notification Card',
 };
 
-const drawerWidthExpanded = 240;
-const drawerWidthCollapsed = 64;
+const drawerWidthExpanded: number = 240;
+const drawerWidthCollapsed: number = 64;
 
 const PageLayout = ({ children }: Props): JSX.Element => {
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(false);
-  const [userCollapsed, setUserCollapsed] = useState(false); // Track if the user collapsed manually
+  const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [userCollapsed, setUserCollapsed] = useState<boolean>(false);
   const [preferencesPopupVisibility, setPreferencesPopupVisibility] =
-    useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+    useState<boolean>(false);
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const isMdScreen = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down('md'),
@@ -75,10 +75,9 @@ const PageLayout = ({ children }: Props): JSX.Element => {
     document.title = pageTitles[location.pathname];
 
     if (isMdScreen) {
-      setCollapsed(true); // Auto-collapse on smaller screens
-      setUserCollapsed(false); // Reset user collapse state
+      setCollapsed(true);
+      setUserCollapsed(false);
     } else if (!userCollapsed) {
-      // Only expand if the user hasn't manually collapsed
       setCollapsed(false);
     }
   }, [location.pathname, isMdScreen, userCollapsed]);
@@ -178,7 +177,7 @@ const PageLayout = ({ children }: Props): JSX.Element => {
           {/* Drawer content */}
           <List sx={{ px: 1 }}>
             {items.map((item) => {
-              const isSelected = location.pathname === item.link; // Check if the current route matches
+              const isSelected = location.pathname === item.link;
               return (
                 <ListItem
                   key={item.text}
@@ -190,13 +189,13 @@ const PageLayout = ({ children }: Props): JSX.Element => {
                     alignItems: 'center',
                     justifyContent:
                       collapsed && !isMdScreen ? 'center' : 'flex-start',
-                    bgcolor: isSelected ? '#FF2D55' : 'inherit', // Highlight color for selected item
+                    bgcolor: isSelected ? '#FF2D55' : 'inherit',
                     borderRadius: '8px',
                     color: '#FFFFFF',
-                    margin: collapsed && !isMdScreen ? '8px 0' : '4px 0px', // Add spacing around items
-                    textDecoration: 'none', // Remove underline
+                    margin: collapsed && !isMdScreen ? '8px 0' : '4px 0px',
+                    textDecoration: 'none',
                     '&:hover': {
-                      bgcolor: isSelected ? '#FF2D55' : '#333A47', // Slightly different hover for selected
+                      bgcolor: isSelected ? '#FF2D55' : '#333A47',
                       borderRadius: '8px',
                     },
                   }}
@@ -241,7 +240,7 @@ const PageLayout = ({ children }: Props): JSX.Element => {
               <IconButton
                 onClick={() => {
                   setCollapsed(!collapsed);
-                  setUserCollapsed(!collapsed); // Track manual toggle state
+                  setUserCollapsed(!collapsed);
                 }}
                 sx={{ color: '#FFFFFF' }}
               >
@@ -261,9 +260,9 @@ const PageLayout = ({ children }: Props): JSX.Element => {
             collapsed ? drawerWidthCollapsed : drawerWidthExpanded
           }px)`,
           transition: 'width 0.3s',
-          height: '100vh', // Ensure it takes up the full height of the viewport
-          display: 'flex', // Use flexbox to ensure content takes available space
-          flexDirection: 'column', // Make the content stack vertically
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         <Toolbar />
@@ -271,8 +270,7 @@ const PageLayout = ({ children }: Props): JSX.Element => {
           sx={{
             flexGrow: 1,
             overflow: 'auto',
-            //padding: 2,
-            height: '100%', // Ensure the content takes up the full height of the parent
+            height: '100%',
             backgroundColor: '#202532',
           }}
         >

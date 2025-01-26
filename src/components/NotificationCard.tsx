@@ -71,7 +71,7 @@ const getChannelIcon = (channel: Channels): React.ReactElement => {
 };
 
 const NotificationCard: React.FC<NotificationCardProps> = (props) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null,
   );

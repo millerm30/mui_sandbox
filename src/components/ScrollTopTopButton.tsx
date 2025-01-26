@@ -3,7 +3,7 @@ import { Fab } from '@mui/material';
 import { ArrowUpwardOutlined } from '@mui/icons-material';
 
 const ScrollToTopButton = () => {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState<boolean>(false);
 
   const handleScroll = () => {
     if (window.scrollY > 300) {
