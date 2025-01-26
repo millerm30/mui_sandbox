@@ -76,11 +76,7 @@ const NotificationCardContainer = () => {
       container
     >
       {data?.map((notification) => (
-        <Grid2
-          key={notification.id}
-          size={{ md: 12, lg: 10, xl: 8 }}
-          spacing={2}
-        >
+        <Grid2 key={notification.id} size={{ md: 12, lg: 10, xl: 8 }}>
           <NotificationCard
             title={notification.title}
             notificationId={notification.notificationId}
