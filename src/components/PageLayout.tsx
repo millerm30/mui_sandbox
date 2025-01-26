@@ -225,7 +225,6 @@ const PageLayout = ({ children }: Props): JSX.Element => {
           width: `calc(100% - ${
             collapsed ? drawerWidthCollapsed : drawerWidthExpanded
           }px)`,
-          backgroundColor: '#f0f2f5',
           transition: 'width 0.3s',
           height: '100vh', // Ensure it takes up the full height of the viewport
           display: 'flex', // Use flexbox to ensure content takes available space
@@ -233,7 +232,17 @@ const PageLayout = ({ children }: Props): JSX.Element => {
         }}
       >
         <Toolbar />
-        {children}
+        <Box
+          sx={{
+            flexGrow: 1,
+            overflow: 'auto',
+            //padding: 2,
+            height: '100%', // Ensure the content takes up the full height of the parent
+            backgroundColor: '#202532',
+          }}
+        >
+          {children}
+        </Box>
       </Box>
     </Box>
   );

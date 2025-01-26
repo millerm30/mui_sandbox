@@ -8,39 +8,45 @@ const PushContainer = () => {
     useLoadingContext();
 
   return (
-    <Grid2 container spacing={3} p={3}>
+    <Grid2 container columns={12} sx={{ height: '100%' }}>
       <Grid2
-        container
-        size={12}
-        alignItems={'center'}
-        justifyContent={'center'}
+        columns={12}
+        sx={{ borderTopLeftRadius: 8 }}
+        bgcolor="#f5f5f5"
+        p={3}
+        width={1}
       >
-        <FormControlLabel
-          control={
-            <Switch
-              checked={isLoading}
-              onChange={(event) => handleLoadingChange(event)}
-              inputProps={{ 'aria-label': 'loading-switch' }}
-            />
-          }
-          label="Show Loading"
-        />
-        <FormControlLabel
-          control={
-            <Switch
-              checked={isSubmitting}
-              onChange={(event) => handleSubmit(event)}
-              inputProps={{ 'aria-label': 'submitting-switch' }}
-            />
-          }
-          label="Show Submitting"
-        />
-      </Grid2>
-      <Grid2 size={{ md: 6, xs: 12 }}>
-        <AppleForm isLoading={isLoading} isSubmitting={isSubmitting} />
-      </Grid2>
-      <Grid2 size={{ md: 6, xs: 12 }}>
-        <AndroidForm isLoading={isLoading} isSubmitting={isSubmitting} />
+        <Grid2>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isLoading}
+                onChange={(event) => handleLoadingChange(event)}
+                inputProps={{ 'aria-label': 'loading-switch' }}
+              />
+            }
+            label="Show Loading"
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isSubmitting}
+                onChange={(event) => handleSubmit(event)}
+                inputProps={{ 'aria-label': 'submitting-switch' }}
+              />
+            }
+            label="Show Submitting"
+          />
+        </Grid2>
+
+        <Grid2 container columns={12} spacing={2}>
+          <Grid2 size={{ md: 6, xs: 12 }}>
+            <AppleForm isLoading={isLoading} isSubmitting={isSubmitting} />
+          </Grid2>
+          <Grid2 size={{ md: 6, xs: 12 }}>
+            <AndroidForm isLoading={isLoading} isSubmitting={isSubmitting} />
+          </Grid2>
+        </Grid2>
       </Grid2>
     </Grid2>
   );

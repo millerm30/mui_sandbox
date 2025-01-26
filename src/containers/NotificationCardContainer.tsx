@@ -56,6 +56,8 @@ const NotificationCardContainer = () => {
           justifyContent: 'center',
           alignItems: 'center',
           height: '100%',
+          backgroundColor: '#f5f5f5',
+          borderTopLeftRadius: 8,
         }}
       >
         <CircularProgress color="primary" />
@@ -64,9 +66,21 @@ const NotificationCardContainer = () => {
   }
 
   return (
-    <Grid2 container spacing={3} p={3} sx={{ backgroundColor: '#f5f5f5' }}>
+    <Grid2
+      columns={12}
+      sx={{ borderTopLeftRadius: 8 }}
+      bgcolor="#f5f5f5"
+      p={3}
+      width={1}
+      spacing={2}
+      container
+    >
       {data?.map((notification) => (
-        <Grid2 key={notification.id} size={{ md: 12, lg: 10, xl: 8 }}>
+        <Grid2
+          key={notification.id}
+          size={{ md: 12, lg: 10, xl: 8 }}
+          spacing={2}
+        >
           <NotificationCard
             title={notification.title}
             notificationId={notification.notificationId}
