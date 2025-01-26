@@ -6,52 +6,48 @@ import {
   WestOutlined,
   EastOutlined,
 } from '@mui/icons-material';
-import { Layout, Menu, MenuProps } from 'antd';
-import { Typography, Switch, FormControlLabel, Grid2 } from '@mui/material';
+import {
+  IconButton,
+  Typography,
+  Box,
+  CssBaseline,
+  Drawer,
+  AppBar,
+  Toolbar,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  useMediaQuery,
+  Theme,
+} from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
-import { useLoadingContext } from '../hooks/useLoadingContext';
 import {
   NotificationPopup,
   NotificationPreferencesPopup,
 } from '@notificationapi/react';
 
-const { Sider } = Layout;
-
 interface Props {
   children?: React.ReactNode;
 }
 
-type MenuItem = Required<MenuProps>['items'][number];
-
-function getItem(
-  label: React.ReactNode,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-): MenuItem {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  } as MenuItem;
-}
-
-const items: MenuItem[] = [
-  getItem(<Link to="/">Home</Link>, '1', <HomeOutlined />),
-  getItem(
-    <Link to="/push-notifications">Push Notifications</Link>,
-    '2',
-    <PushPinOutlined />,
-  ),
-  getItem(
-    <Link to="/notification-card">Notification Card</Link>,
-    '3',
-    <BadgeOutlined />,
-  ),
+const items = [
+  {
+    text: 'Home',
+    link: '/',
+    icon: <HomeOutlined fontSize="small" />,
+  },
+  {
+    text: 'Push Notifications',
+    link: '/push-notifications',
+    icon: <PushPinOutlined fontSize="small" />,
+  },
+  {
+    text: 'Notification Card',
+    link: '/notification-card',
+    icon: <BadgeOutlined fontSize="small" />,
+  },
 ];
-
-const locationsToShowSwitches = ['/push-notifications'];
 
 const pageTitles: { [key: string]: string } = {
   '/': 'Home',
@@ -59,104 +55,187 @@ const pageTitles: { [key: string]: string } = {
   '/notification-card': 'Notification Card',
 };
 
+const drawerWidthExpanded = 240;
+const drawerWidthCollapsed = 64;
+
 const PageLayout = ({ children }: Props): JSX.Element => {
-  const { handleLoadingChange, handleSubmit, isLoading, isSubmitting } =
-    useLoadingContext();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+  const [userCollapsed, setUserCollapsed] = useState(false); // Track if the user collapsed manually
   const [preferencesPopupVisibility, setPreferencesPopupVisibility] =
     useState(false);
 
+  const isMdScreen = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down('md'),
+  );
+
   useEffect(() => {
     document.title = pageTitles[location.pathname];
-  }, [location.pathname]);
+
+    if (isMdScreen) {
+      setCollapsed(true); // Auto-collapse on smaller screens
+      setUserCollapsed(false); // Reset user collapse state
+    } else if (!userCollapsed) {
+      // Only expand if the user hasn't manually collapsed
+      setCollapsed(false);
+    }
+  }, [location.pathname, isMdScreen, userCollapsed]);
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider
-        breakpoint="lg"
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-        style={{ paddingTop: 64, backgroundColor: '#202532' }}
-        theme="dark"
-        trigger={
-          collapsed ? (
-            <EastOutlined style={{ color: '#FFFFFF' }} />
-          ) : (
-            <WestOutlined style={{ color: '#FFFFFF' }} />
-          )
-        }
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      {/* Header */}
+      <AppBar
+        position="fixed"
+        sx={{
+          width: {
+            xs: `calc(100% - ${drawerWidthCollapsed}px)`,
+            sm: `calc(100% - ${
+              collapsed ? drawerWidthCollapsed : drawerWidthExpanded
+            }px)`,
+          },
+          ml: {
+            xs: `${drawerWidthCollapsed}px`,
+            sm: `${collapsed ? drawerWidthCollapsed : drawerWidthExpanded}px`,
+          },
+          backgroundColor: '#202532',
+          transition: (theme) =>
+            theme.transitions.create(['width', 'margin-left'], {
+              duration: theme.transitions.duration.standard,
+              easing: theme.transitions.easing.easeInOut,
+            }),
+          boxShadow: 'none',
+        }}
       >
-        <Menu
-          rootClassName="mainMenu"
-          defaultSelectedKeys={['1']}
-          items={items}
-          mode="inline"
-          theme="dark"
-          style={{ backgroundColor: '#202532' }}
-        />
-      </Sider>
-      <Layout style={{ backgroundColor: '#001529' }}>
-        <Grid2
-          container
-          justifyContent="space-between"
-          bgcolor={'#202532'}
-          height={64}
+        <Toolbar
+          sx={{ justifyContent: 'space-between', alignItems: 'flex-end' }}
         >
-          <Grid2 container pl={3} alignItems={'flex-end'}>
-            <Typography color="#FFFFFF" variant="h5" marginBottom={1}>
-              {pageTitles[location.pathname]}
-            </Typography>
-          </Grid2>
+          <Typography color="#FFFFFF" variant="h5" marginBottom={1}>
+            {pageTitles[location.pathname]}
+          </Typography>
 
-          {locationsToShowSwitches.includes(location.pathname) && (
-            <Grid2 container alignItems={'flex-end'} marginBottom={1}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={isLoading}
-                    onChange={(event) => handleLoadingChange(event)}
-                    inputProps={{ 'aria-label': 'loading-switch' }}
-                  />
-                }
-                label="Show Loading"
-                sx={{ color: '#FFFFFF' }}
-              />
-
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={isSubmitting}
-                    onChange={(event) => handleSubmit(event)}
-                    inputProps={{ 'aria-label': 'submitting-switch' }}
-                  />
-                }
-                label="Show Submitting"
-                sx={{ color: '#FFFFFF' }}
-              />
-            </Grid2>
-          )}
-          <Grid2 container alignItems={'center'} mx={2}>
-            <NotificationPopup buttonIconSize={24} iconColor="#FFFFFF" />
-            <NotificationPreferencesPopup
-              open={preferencesPopupVisibility}
-              onClose={() => setPreferencesPopupVisibility(false)}
-            />
-          </Grid2>
-        </Grid2>
-        <Grid2
-          height="100%"
-          style={{
-            padding: 24,
-            backgroundColor: '#f5f5f5',
-            borderTopLeftRadius: 8,
+          <NotificationPopup buttonIconSize={24} iconColor="#FFFFFF" />
+          <NotificationPreferencesPopup
+            open={preferencesPopupVisibility}
+            onClose={() => setPreferencesPopupVisibility(false)}
+          />
+        </Toolbar>
+      </AppBar>
+      {/* Drawer */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: collapsed ? drawerWidthCollapsed : drawerWidthExpanded,
+          flexShrink: 0,
+          transition: 'width 0.3s',
+          [`& .MuiDrawer-paper`]: {
+            width: collapsed ? drawerWidthCollapsed : drawerWidthExpanded,
+            boxSizing: 'border-box',
+            transition: (theme) =>
+              theme.transitions.create('width', {
+                duration: theme.transitions.duration.standard,
+                easing: theme.transitions.easing.easeInOut,
+              }),
+          },
+        }}
+        PaperProps={{
+          sx: {
+            backgroundColor: '#202532',
+            borderRight: 'none',
+          },
+        }}
+      >
+        <Toolbar />
+        <Box sx={{ overflow: 'hidden' }}>
+          {/* Drawer content */}
+          <List sx={{ px: 1 }}>
+            {items.map((item) => {
+              const isSelected = location.pathname === item.link; // Check if the current route matches
+              return (
+                <ListItem
+                  key={item.text}
+                  component={Link}
+                  to={item.link}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: collapsed ? 'column' : 'row',
+                    alignItems: 'center',
+                    justifyContent: collapsed ? 'center' : 'flex-start',
+                    bgcolor: isSelected ? '#FF2D55' : 'inherit', // Highlight color for selected item
+                    borderRadius: '8px',
+                    color: '#FFFFFF',
+                    margin: collapsed ? '8px 0' : '4px 0px', // Add spacing around items
+                    textDecoration: 'none', // Remove underline
+                    '&:hover': {
+                      bgcolor: isSelected ? '#FF2D55' : '#333A47', // Slightly different hover for selected
+                      borderRadius: '8px',
+                    },
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      color: isSelected ? '#FFFFFF' : '#FFFFFF',
+                      minWidth: 'unset',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  {!collapsed && (
+                    <ListItemText
+                      primary={item.text}
+                      sx={{
+                        color: isSelected ? '#FFFFFF' : '#FFFFFF',
+                        marginLeft: 1,
+                      }}
+                    />
+                  )}
+                </ListItem>
+              );
+            })}
+          </List>
+        </Box>
+        {/* Drawer collapse button with the arrow icon, this box should be on the verry bottom of the drawer using space between */}
+        <Box sx={{ flexGrow: 1 }} />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 50,
           }}
         >
-          {children}
-        </Grid2>
-      </Layout>
-    </Layout>
+          <IconButton
+            onClick={() => {
+              setCollapsed(!collapsed);
+              setUserCollapsed(!collapsed); // Track manual toggle state
+            }}
+            sx={{ color: '#FFFFFF' }}
+          >
+            {collapsed ? <EastOutlined /> : <WestOutlined />}
+          </IconButton>
+        </Box>
+      </Drawer>
+
+      {/* Main Content */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          width: `calc(100% - ${
+            collapsed ? drawerWidthCollapsed : drawerWidthExpanded
+          }px)`,
+          backgroundColor: '#f0f2f5',
+          transition: 'width 0.3s',
+          height: '100vh', // Ensure it takes up the full height of the viewport
+          display: 'flex', // Use flexbox to ensure content takes available space
+          flexDirection: 'column', // Make the content stack vertically
+        }}
+      >
+        <Toolbar />
+        {children}
+      </Box>
+    </Box>
   );
 };
 

@@ -1,14 +1,5 @@
-body {
-  margin: 0;
-}
-
 /* These are the company main colors
   Pink / Red : #FF2D55
   Dark Blue : #202532
   Green : #37B877
 */
-
-/* Custom color for the selected Main Menu Item */
-.mainMenu .ant-menu-item-selected {
-  background-color: #ff2d55 !important;
-}

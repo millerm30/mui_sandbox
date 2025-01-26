@@ -64,7 +64,7 @@ const NotificationCardContainer = () => {
   }
 
   return (
-    <Grid2 container spacing={3}>
+    <Grid2 container spacing={3} p={3} sx={{ backgroundColor: '#f5f5f5' }}>
       {data?.map((notification) => (
         <Grid2 key={notification.id} size={{ md: 12, lg: 10, xl: 8 }}>
           <NotificationCard
