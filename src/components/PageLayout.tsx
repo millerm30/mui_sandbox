@@ -6,6 +6,7 @@ import {
   WestOutlined,
   EastOutlined,
 } from '@mui/icons-material';
+import MenuIcon from '@mui/icons-material/Menu';
 import {
   IconButton,
   Typography,
@@ -64,6 +65,7 @@ const PageLayout = ({ children }: Props): JSX.Element => {
   const [userCollapsed, setUserCollapsed] = useState(false); // Track if the user collapsed manually
   const [preferencesPopupVisibility, setPreferencesPopupVisibility] =
     useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const isMdScreen = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down('md'),
@@ -81,6 +83,10 @@ const PageLayout = ({ children }: Props): JSX.Element => {
     }
   }, [location.pathname, isMdScreen, userCollapsed]);
 
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -89,14 +95,14 @@ const PageLayout = ({ children }: Props): JSX.Element => {
         position="fixed"
         sx={{
           width: {
-            xs: `calc(100% - ${drawerWidthCollapsed}px)`,
-            sm: `calc(100% - ${
+            scrollMarginBlockStart: '100%',
+            md: `calc(100% - ${
               collapsed ? drawerWidthCollapsed : drawerWidthExpanded
             }px)`,
           },
           ml: {
-            xs: `${drawerWidthCollapsed}px`,
-            sm: `${collapsed ? drawerWidthCollapsed : drawerWidthExpanded}px`,
+            md: 0,
+            lg: `${collapsed ? drawerWidthCollapsed : drawerWidthExpanded}px`,
           },
           backgroundColor: '#202532',
           transition: (theme) =>
@@ -110,6 +116,18 @@ const PageLayout = ({ children }: Props): JSX.Element => {
         <Toolbar
           sx={{ justifyContent: 'space-between', alignItems: 'flex-end' }}
         >
+          {isMdScreen && (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+
           <Typography color="#FFFFFF" variant="h5" marginBottom={1}>
             {pageTitles[location.pathname]}
           </Typography>
@@ -123,13 +141,23 @@ const PageLayout = ({ children }: Props): JSX.Element => {
       </AppBar>
       {/* Drawer */}
       <Drawer
-        variant="permanent"
+        variant={isMdScreen ? 'temporary' : 'permanent'}
+        open={isMdScreen ? drawerOpen : undefined}
+        onClose={isMdScreen ? handleDrawerToggle : undefined}
         sx={{
-          width: collapsed ? drawerWidthCollapsed : drawerWidthExpanded,
+          width: isMdScreen
+            ? drawerWidthExpanded
+            : collapsed
+              ? drawerWidthCollapsed
+              : drawerWidthExpanded,
           flexShrink: 0,
           transition: 'width 0.3s',
           [`& .MuiDrawer-paper`]: {
-            width: collapsed ? drawerWidthCollapsed : drawerWidthExpanded,
+            width: isMdScreen
+              ? drawerWidthExpanded
+              : collapsed
+                ? drawerWidthCollapsed
+                : drawerWidthExpanded,
             boxSizing: 'border-box',
             transition: (theme) =>
               theme.transitions.create('width', {
@@ -158,19 +186,21 @@ const PageLayout = ({ children }: Props): JSX.Element => {
                   to={item.link}
                   sx={{
                     display: 'flex',
-                    flexDirection: collapsed ? 'column' : 'row',
+                    flexDirection: collapsed && !isMdScreen ? 'column' : 'row',
                     alignItems: 'center',
-                    justifyContent: collapsed ? 'center' : 'flex-start',
+                    justifyContent:
+                      collapsed && !isMdScreen ? 'center' : 'flex-start',
                     bgcolor: isSelected ? '#FF2D55' : 'inherit', // Highlight color for selected item
                     borderRadius: '8px',
                     color: '#FFFFFF',
-                    margin: collapsed ? '8px 0' : '4px 0px', // Add spacing around items
+                    margin: collapsed && !isMdScreen ? '8px 0' : '4px 0px', // Add spacing around items
                     textDecoration: 'none', // Remove underline
                     '&:hover': {
                       bgcolor: isSelected ? '#FF2D55' : '#333A47', // Slightly different hover for selected
                       borderRadius: '8px',
                     },
                   }}
+                  onClick={isMdScreen ? handleDrawerToggle : undefined}
                 >
                   <ListItemIcon
                     sx={{
@@ -181,7 +211,7 @@ const PageLayout = ({ children }: Props): JSX.Element => {
                   >
                     {item.icon}
                   </ListItemIcon>
-                  {!collapsed && (
+                  {(!collapsed || isMdScreen) && (
                     <ListItemText
                       primary={item.text}
                       sx={{
@@ -196,25 +226,30 @@ const PageLayout = ({ children }: Props): JSX.Element => {
           </List>
         </Box>
         {/* Drawer collapse button with the arrow icon, this box should be on the verry bottom of the drawer using space between */}
-        <Box sx={{ flexGrow: 1 }} />
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: 50,
-          }}
-        >
-          <IconButton
-            onClick={() => {
-              setCollapsed(!collapsed);
-              setUserCollapsed(!collapsed); // Track manual toggle state
-            }}
-            sx={{ color: '#FFFFFF' }}
-          >
-            {collapsed ? <EastOutlined /> : <WestOutlined />}
-          </IconButton>
-        </Box>
+        {/*This box should be hidden on smaller screens */}
+        {!isMdScreen && (
+          <>
+            <Box sx={{ flexGrow: 1 }} />
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: 50,
+              }}
+            >
+              <IconButton
+                onClick={() => {
+                  setCollapsed(!collapsed);
+                  setUserCollapsed(!collapsed); // Track manual toggle state
+                }}
+                sx={{ color: '#FFFFFF' }}
+              >
+                {collapsed ? <EastOutlined /> : <WestOutlined />}
+              </IconButton>
+            </Box>
+          </>
+        )}
       </Drawer>
 
       {/* Main Content */}
